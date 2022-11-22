@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using UnityEditor;
 
@@ -40,9 +42,8 @@ namespace DefineSwitchTool.Editor.Tests
             DefineSwitcher.ToVkGames();
             
             //Assert
-            string definesString = PlayerSettings.GetScriptingDefineSymbolsForGroup(
-                EditorUserBuildSettings.selectedBuildTargetGroup);
-            Assert.False(definesString.Contains(CustomDefines.YandexGamesName));
+            List<string> allDefines = GetDefineSymbols();
+            Assert.False(allDefines.Contains(CustomDefines.YandexGamesName));
         }
 
         private void Can_Switch(string symbol, Action action)
@@ -53,9 +54,8 @@ namespace DefineSwitchTool.Editor.Tests
             action.Invoke();
         
             //Assert
-            string definesString = PlayerSettings.GetScriptingDefineSymbolsForGroup(
-                EditorUserBuildSettings.selectedBuildTargetGroup);
-            Assert.True(definesString.Contains(symbol));
+            List<string> allDefines = GetDefineSymbols();
+            Assert.True(allDefines.Contains(symbol));
         }
         
         private void Can_Switch_Without_Duplicate(string symbol, Action action)
@@ -67,10 +67,16 @@ namespace DefineSwitchTool.Editor.Tests
             action.Invoke();
         
             //Assert
+            List<string> allDefines = GetDefineSymbols();
+            Assert.AreEqual(allDefines.LastIndexOf(symbol),
+                allDefines.IndexOf(symbol));
+        }
+
+        private List<string> GetDefineSymbols()
+        {
             string definesString = PlayerSettings.GetScriptingDefineSymbolsForGroup(
                 EditorUserBuildSettings.selectedBuildTargetGroup);
-            Assert.AreEqual(definesString.LastIndexOf(symbol),
-                definesString.IndexOf(symbol));
+            return definesString.Split(';').ToList();
         }
     }
 }
