@@ -14,14 +14,14 @@ namespace DefineSwitchTool.Editor
         public static void ToVkGames()
         {
             AddDefineSymbols(CustomDefines.VkGamesName);
-            Debug.Log("ToVkGames!");
+            Debug.Log("Switch to VK_GAMES!");
         }
         
         [MenuItem("Tools/DefineSwitcher/ToYandexGames")]
         public static void ToYandexGames()
         {
             AddDefineSymbols(CustomDefines.YandexGamesName);
-            Debug.Log("ToYandexGames!");
+            Debug.Log("Switch to YANDEX_GAMES!");
         }
 
         private static void AddDefineSymbols(string symbol)
