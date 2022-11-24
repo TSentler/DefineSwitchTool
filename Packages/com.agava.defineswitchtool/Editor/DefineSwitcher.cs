@@ -28,13 +28,12 @@ namespace DefineSwitchTool.Editor
             return definesString.Split(';').ToList();
         }
 
-        private static void AddDefineSymbols(string symbol)
+        public static void AddDefineSymbols(string symbol)
         {
             AddDefineSymbols(new []{symbol});
-            Debug.Log($"Switch to {symbol}!");
         }
         
-        private static void AddDefineSymbols(string[] symbols)
+        public static void AddDefineSymbols(string[] symbols)
         {
             var _defineSymbols = new CustomDefines();
             List<string> allDefines = GetCurrentDefineSymbols();
@@ -42,6 +41,9 @@ namespace DefineSwitchTool.Editor
             allDefines.AddRange(symbols.Except(allDefines));
             PlayerSettings.SetScriptingDefineSymbolsForGroup (
                 _buildTargetGroup, string.Join(";", allDefines.ToArray()));
+
+            var symbolsString = string.Join(" ", symbols);
+            Debug.Log($"Switch to {symbolsString}!");
         }
     }
 }

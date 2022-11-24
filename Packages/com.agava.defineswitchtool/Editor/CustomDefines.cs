@@ -16,6 +16,8 @@ namespace DefineSwitchTool.Editor
         public static string VkGamesName => "VK_GAMES";
         public static string YandexGamesName => "YANDEX_GAMES";
 
+        public bool IsInitialized => _defineSymbolsData != null;
+        public string SymbolsName => nameof(_defineSymbolsData.Symbols);
         public DefineSymbolsData DefineSymbolsData => _defineSymbolsData;
         
         public CustomDefines()

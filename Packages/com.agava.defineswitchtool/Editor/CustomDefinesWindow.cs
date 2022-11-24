@@ -9,20 +9,20 @@ namespace DefineSwitchTool.Editor
         private CustomDefines _customDefines;
         private List<string> _checkedSymbols;
 
-        private void Awake()
+        private void OnEnable()
         {
             _customDefines = new CustomDefines();
 
-            if (_customDefines.DefineSymbolsData == null)
+            if (_customDefines.IsInitialized)
+            {
+                //Selection.activeObject = _customDefines.DefineSymbolsData;
+                _checkedSymbols = DefineSwitcher.GetCurrentDefineSymbols();
+            }
+            else
             {
                 Debug.LogError("Can`t find " 
                                + CustomDefines.DefineSymbolsDataPath);
                 Close();
-            }
-            else
-            {
-                Selection.activeObject = _customDefines.DefineSymbolsData;
-                _checkedSymbols = DefineSwitcher.GetCurrentDefineSymbols();
             }
         }
 
@@ -38,7 +38,7 @@ namespace DefineSwitchTool.Editor
             SerializedObject serializedObject = 
                 new SerializedObject(_customDefines.DefineSymbolsData);
             SerializedProperty stringsProperty = serializedObject.FindProperty(
-                nameof(_customDefines.DefineSymbolsData.Symbols));
+                _customDefines.SymbolsName);
             EditorGUILayout.PropertyField(stringsProperty, true);
             serializedObject.ApplyModifiedProperties();
 
@@ -55,8 +55,11 @@ namespace DefineSwitchTool.Editor
                     _checkedSymbols.Add(symbol);
                 }
             }
-            
-            Debug.Log( string.Join(",", _checkedSymbols));
+
+            if (GUILayout.Button("Apply"))
+            {
+                DefineSwitcher.AddDefineSymbols(_checkedSymbols.ToArray());
+            }
         }
     }
 }
