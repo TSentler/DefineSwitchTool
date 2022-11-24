@@ -9,31 +9,36 @@ namespace DefineSwitchTool.Editor
     {
         private static readonly BuildTargetGroup _buildTargetGroup =
             EditorUserBuildSettings.selectedBuildTargetGroup;
-
+        
         [MenuItem("Tools/DefineSwitcher/ToVkGames")]
         public static void ToVkGames()
         {
             AddDefineSymbols(CustomDefines.VkGamesName);
-            Debug.Log("Switch to VK_GAMES!");
         }
         
         [MenuItem("Tools/DefineSwitcher/ToYandexGames")]
         public static void ToYandexGames()
         {
             AddDefineSymbols(CustomDefines.YandexGamesName);
-            Debug.Log("Switch to YANDEX_GAMES!");
+        }
+
+        public static List<string> GetCurrentDefineSymbols()
+        {
+            string definesString = PlayerSettings.GetScriptingDefineSymbolsForGroup(_buildTargetGroup);
+            return definesString.Split(';').ToList();
         }
 
         private static void AddDefineSymbols(string symbol)
         {
             AddDefineSymbols(new []{symbol});
+            Debug.Log($"Switch to {symbol}!");
         }
         
         private static void AddDefineSymbols(string[] symbols)
         {
-            string definesString = PlayerSettings.GetScriptingDefineSymbolsForGroup(_buildTargetGroup);
-            List<string> allDefines = definesString.Split(';').ToList();
-            allDefines = CustomDefines.ExcludeCustomDefinesFrom(allDefines).ToList();
+            var _defineSymbols = new CustomDefines();
+            List<string> allDefines = GetCurrentDefineSymbols();
+            allDefines = _defineSymbols.ExcludeCustomDefinesFrom(allDefines).ToList();
             allDefines.AddRange(symbols.Except(allDefines));
             PlayerSettings.SetScriptingDefineSymbolsForGroup (
                 _buildTargetGroup, string.Join(";", allDefines.ToArray()));
