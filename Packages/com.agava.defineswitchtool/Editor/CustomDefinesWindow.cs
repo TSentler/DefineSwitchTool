@@ -58,7 +58,7 @@ namespace DefineSwitchTool.Editor
 
             if (GUILayout.Button("Apply"))
             {
-                DefineSwitcher.AddDefineSymbols(_checkedSymbols.ToArray());
+                DefineSwitcher.AddDefineSymbols(_checkedSymbols.ToArray(), _customDefines);
             }
         }
     }

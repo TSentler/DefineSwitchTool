@@ -13,37 +13,60 @@ namespace DefineSwitchTool.Editor
         [MenuItem("Tools/DefineSwitcher/ToVkGames")]
         public static void ToVkGames()
         {
-            AddDefineSymbols(CustomDefines.VkGamesName);
+            AddDefineSymbols(new []{CustomDefines.VkGamesName},
+                new CustomDefines());
         }
-        
+
         [MenuItem("Tools/DefineSwitcher/ToYandexGames")]
         public static void ToYandexGames()
         {
-            AddDefineSymbols(CustomDefines.YandexGamesName);
+            AddDefineSymbols(new []{CustomDefines.YandexGamesName},
+                new CustomDefines());
         }
 
+        [MenuItem("Tools/DefineSwitcher/ToCrazyGames")]
+        public static void ToCrazyGames()
+        {
+            AddDefineSymbols(new []{CustomDefines.CrazyGamesName},
+                new CustomDefines());
+        }
+        
         public static List<string> GetCurrentDefineSymbols()
         {
             string definesString = PlayerSettings.GetScriptingDefineSymbolsForGroup(_buildTargetGroup);
             return definesString.Split(';').ToList();
         }
 
-        public static void AddDefineSymbols(string symbol)
+        public static void AddDefineSymbols(string[] symbols, CustomDefines customDefines)
         {
-            AddDefineSymbols(new []{symbol});
-        }
-        
-        public static void AddDefineSymbols(string[] symbols)
-        {
-            var _defineSymbols = new CustomDefines();
-            List<string> allDefines = GetCurrentDefineSymbols();
-            allDefines = _defineSymbols.ExcludeCustomDefinesFrom(allDefines).ToList();
-            allDefines.AddRange(symbols.Except(allDefines));
-            PlayerSettings.SetScriptingDefineSymbolsForGroup (
-                _buildTargetGroup, string.Join(";", allDefines.ToArray()));
+            if (CustomDefinesContainsSymbols(symbols, customDefines) == false)
+                return;
+            
+            var currentDefinesWithoutCustom = 
+                customDefines.ExcludeFrom(GetCurrentDefineSymbols()).ToList();
+            var newDefines = new List<string>();
+            newDefines.AddRange(currentDefinesWithoutCustom);
+            newDefines.AddRange(symbols.Except(currentDefinesWithoutCustom));
+            SetDefineSymbols(newDefines.ToArray());
 
             var symbolsString = string.Join(" ", symbols);
             Debug.Log($"Switch to {symbolsString}!");
         }
+
+        private static void SetDefineSymbols(string[] allDefinesWithoutCustom)
+        {
+            PlayerSettings.SetScriptingDefineSymbolsForGroup(
+                _buildTargetGroup, string.Join(";", allDefinesWithoutCustom));
+        }
+
+        private static bool CustomDefinesContainsSymbols(string[] symbols, CustomDefines customDefines)
+        {
+            if (customDefines.ContainsAll(symbols))
+                return true;
+        
+            Debug.LogError("Define symbol not found in CustomDefines");
+            return false;
+        }
+
     }
 }

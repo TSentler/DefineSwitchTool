@@ -15,6 +15,7 @@ namespace DefineSwitchTool.Editor
 
         public static string VkGamesName => "VK_GAMES";
         public static string YandexGamesName => "YANDEX_GAMES";
+        public static string CrazyGamesName => "CRAZY_GAMES";
 
         public bool IsInitialized => _defineSymbolsData != null;
         public string SymbolsName => nameof(_defineSymbolsData.Symbols);
@@ -29,11 +30,29 @@ namespace DefineSwitchTool.Editor
             }
         }
         
-        public IEnumerable<string> ExcludeCustomDefinesFrom(IEnumerable<string> defines)
+        public IEnumerable<string> ExcludeFrom(IEnumerable<string> defines)
         {
             return defines.Except(_defineSymbolsData.Symbols);
         }
         
+        public bool Contains(string symbol)
+        {
+            return _defineSymbolsData.Symbols.Contains(symbol);
+        }
+        
+        public bool ContainsAll(string[] symbol)
+        {
+            for (int i = 0; i < symbol.Length; i++)
+            {
+                if (Contains(symbol[i]) == false)
+                {
+                    return false;
+                } 
+            }
+
+            return true;
+        }
+
         private DefineSymbolsData CreateDefineSymbolsData()
         {
             DefineSymbolsData asset =
