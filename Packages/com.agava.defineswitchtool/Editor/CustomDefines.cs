@@ -8,8 +8,10 @@ namespace DefineSwitchTool.Editor
     public class CustomDefines
     {
         public static readonly string DefineSymbolsDataPath =
-            "Packages/com.agava.defineswitchtool/Editor/"
+            "Assets/" + DefineSwitchToolFolder + "/Editor/"
             + typeof(DefineSymbolsData).Name + ".asset";
+        
+        private static readonly string DefineSwitchToolFolder = "DefineSwitchTool";
         
         private DefineSymbolsData _defineSymbolsData;
 
@@ -55,6 +57,8 @@ namespace DefineSwitchTool.Editor
 
         private DefineSymbolsData CreateDefineSymbolsData()
         {
+            CreateFolder();
+            
             DefineSymbolsData asset =
                 ScriptableObject.CreateInstance<DefineSymbolsData>();
             string uniqAssetPath =
@@ -63,6 +67,23 @@ namespace DefineSwitchTool.Editor
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
             return AssetDatabase.LoadAssetAtPath<DefineSymbolsData>(DefineSymbolsDataPath);
+        }
+
+        private static void CreateFolder()
+        {
+            var path = "Assets";
+            var folder = DefineSwitchToolFolder;
+            if (AssetDatabase.IsValidFolder(path + "/" + folder) == false)
+            {
+                AssetDatabase.CreateFolder(path, folder);
+            }
+
+            path += "/" +folder;
+            folder = "Editor";
+            if (AssetDatabase.IsValidFolder(path + "/" + folder) == false)
+            {
+                AssetDatabase.CreateFolder(path, folder);
+            }
         }
 
         private DefineSymbolsData LoadDefineSymbolsData()
