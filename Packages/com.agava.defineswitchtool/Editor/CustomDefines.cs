@@ -7,12 +7,12 @@ namespace DefineSwitchTool.Editor
 {
     public class CustomDefines
     {
+        private const string _defineSwitchToolFolder = "DefineSwitchTool";
+
         public static readonly string DefineSymbolsDataPath =
-            "Assets/" + DefineSwitchToolFolder + "/Editor/"
+            "Assets/" + _defineSwitchToolFolder + "/Editor/"
             + typeof(DefineSymbolsData).Name + ".asset";
-        
-        private static readonly string DefineSwitchToolFolder = "DefineSwitchTool";
-        
+                
         private DefineSymbolsData _defineSymbolsData;
 
         public static string VkGamesName => "VK_GAMES";
@@ -72,7 +72,7 @@ namespace DefineSwitchTool.Editor
         private static void CreateFolder()
         {
             var path = "Assets";
-            var folder = DefineSwitchToolFolder;
+            var folder = _defineSwitchToolFolder;
             if (AssetDatabase.IsValidFolder(path + "/" + folder) == false)
             {
                 AssetDatabase.CreateFolder(path, folder);
