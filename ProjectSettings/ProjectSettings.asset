@@ -591,7 +591,7 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLDecompressionFallback: 0
   scriptingDefineSymbols:
-    1: VK_GAMES
+    1: 
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend: {}
