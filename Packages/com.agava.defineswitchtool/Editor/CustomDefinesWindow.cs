@@ -30,9 +30,7 @@ namespace DefineSwitchTool.Editor
 
         private void OnDisable()
         {
-            EditorUtility.SetDirty(_customDefines.DefineSymbolsData);
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
+            _customDefines.Save();
         }
         
         [MenuItem("Tools/DefineSwitcher/CustomDefines")]
@@ -74,6 +72,7 @@ namespace DefineSwitchTool.Editor
 
             if (GUILayout.Button("Apply"))
             {
+                _customDefines.Save();
                 DefineSwitcher.AddDefineSymbols(_checkedSymbols.ToArray(), _customDefines);
             }
         }

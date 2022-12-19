@@ -32,6 +32,16 @@ namespace DefineSwitchTool.Editor
             }
         }
         
+        public void Save()
+        {
+            if (IsInitialized)
+            {
+                EditorUtility.SetDirty(DefineSymbolsData);
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+            }
+        }
+        
         public IEnumerable<string> ExcludeFrom(IEnumerable<string> defines)
         {
             return defines.Except(_defineSymbolsData.Symbols);
